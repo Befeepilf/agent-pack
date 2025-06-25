@@ -43,7 +43,7 @@ steps:
     args:
       - "-c"
       - |
-          pip install uv==0.6.12 --user && uv sync --frozen
+          pip install uv==0.6.12 deprecated --user && uv sync --frozen
           ENGINE_ID=$(python -c "import json,sys;print(json.load(open('deployment_metadata.json'))['remote_agent_engine_id'])")
           uv run adk deploy cloud_run \
             --project ${_PROD_PROJECT_NAME} \
