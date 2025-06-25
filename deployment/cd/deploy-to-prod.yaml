@@ -37,7 +37,7 @@ steps:
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+  - name: "python:3.11-slim"
     id: deploy-ui
     entrypoint: /bin/bash
     args:
