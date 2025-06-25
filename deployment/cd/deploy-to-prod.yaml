@@ -47,7 +47,7 @@ steps:
           ENGINE_ID=$(python -c "import json,sys;print(json.load(open('deployment_metadata.json'))['remote_agent_engine_id'])")
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
-          echo "ENGINE_ID => [$ENGINE_ID]"
+          echo "ENGINE_ID => [$$ENGINE_ID]"
           uv run adk deploy cloud_run \
             --project ${_PROD_PROJECT_NAME} \
             --region ${_REGION} \
