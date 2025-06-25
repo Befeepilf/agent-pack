@@ -47,7 +47,7 @@ steps:
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
           uv run adk deploy cloud_run \
-            --project ${_PROD_PROJECT_NAME} \
+            --project ${_PROD_PROJECT_ID} \
             --region ${_REGION} \
             --service_name ${_UI_SERVICE_NAME} \
             --with_ui \
@@ -57,8 +57,7 @@ steps:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
 substitutions:
-  _PROD_PROJECT_ID: "528546740995"
-  _PROD_PROJECT_NAME: yeply-testing
+  _PROD_PROJECT_ID: yeply-testing
   _REGION: europe-west3
   _DATA_STORE_ID: placeholder
   _DATA_STORE_REGION: europe-west3
