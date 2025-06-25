@@ -85,6 +85,10 @@ See [deployment/README.md](deployment/README.md) for instructions.
 
 The repository includes a Terraform configuration for the setup of a production Google Cloud project. Refer to [deployment/README.md](deployment/README.md) for detailed instructions on how to deploy the infrastructure and application.
 
+We are using Cloud Build in GCP to build and deploy.
+
+
+
 
 ## Monitoring and Observability
 > You can use [this Looker Studio dashboard](https://lookerstudio.google.com/reporting/46b35167-b38b-4e44-bd37-701ef4307418/page/tEnnC
