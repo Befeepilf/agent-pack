@@ -50,7 +50,7 @@ steps:
             --region ${_REGION} \
             --service_name ${_UI_SERVICE_NAME} \
             --with_ui \
-            --session_db_url="agentengine://${ENGINE_ID}" \
+            --session_db_url="agentengine://$ENGINE_ID" \
             app
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
