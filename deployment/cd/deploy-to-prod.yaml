@@ -37,11 +37,30 @@ steps:
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
+  - name: "python:3.11-slim"
+    id: deploy-ui
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+          pip install uv==0.6.12 --user && uv sync --frozen
+          ENGINE_ID=$(python -c "import json,sys;print(json.load(open('deployment_metadata.json'))['remote_agent_engine_id'])")
+          uv run adk deploy cloud_run \
+            --project ${_PROD_PROJECT_ID} \
+            --region ${_REGION} \
+            --service_name ${_UI_SERVICE_NAME} \
+            --with_ui \
+            --session_db_url="agentengine://${ENGINE_ID}" \
+            app
+    env:
+      - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
+
 substitutions:
   _PROD_PROJECT_ID: "528546740995"
   _REGION: europe-west3
   _DATA_STORE_ID: placeholder
   _DATA_STORE_REGION: europe-west3
+  _UI_SERVICE_NAME: agent123-ui
 
 logsBucket: gs://528546740995-europe-west3-cloudbuild-logs/build-logs
 options:
