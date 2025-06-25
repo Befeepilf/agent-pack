@@ -104,6 +104,9 @@ def deploy_agent_engine_app(
     # Set worker parallelism to 1
     env_vars["NUM_WORKERS"] = "1"
 
+    for key, value in env_vars.items():
+        logging.info(f"Found environment variable: {key} = {value}")
+
     # Common configuration for both create and update operations
     agent_config = {
         "agent_engine": agent_engine,
