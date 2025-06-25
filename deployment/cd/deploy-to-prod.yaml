@@ -44,16 +44,14 @@ steps:
       - "-c"
       - |
           pip install uv==0.6.12 --user && uv sync --frozen
-          ENGINE_ID=$$(python -c "import json,sys;print(json.load(open('deployment_metadata.json'))['remote_agent_engine_id'])")
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
-          echo "ENGINE_ID => [$$ENGINE_ID]"
           uv run adk deploy cloud_run \
             --project ${_PROD_PROJECT_NAME} \
             --region ${_REGION} \
             --service_name ${_UI_SERVICE_NAME} \
             --with_ui \
-            --session_db_url="agentengine://$$ENGINE_ID" \
+            --session_db_url="agentengine://${_AGENT_ENGINE_RESOURCE}" \
             app
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
@@ -65,6 +63,7 @@ substitutions:
   _DATA_STORE_ID: placeholder
   _DATA_STORE_REGION: europe-west3
   _UI_SERVICE_NAME: agent123-ui
+  _AGENT_ENGINE_RESOURCE: projects/528546740995/locations/europe-west3/reasoningEngines/227150306205499392
 
 logsBucket: gs://528546740995-europe-west3-cloudbuild-logs/build-logs
 options:
