@@ -57,8 +57,8 @@ steps:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
 substitutions:
-  _PROD_PROJECT_ID: YOUR_PROD_PROJECT_ID
-  _REGION: europe-west3
+  _PROD_PROJECT_ID: 528546740995
+  _REGION: europe-north1
 
 logsBucket: gs://528546740995-europe-north1-cloudbuild-logs/build-logs
 options:
