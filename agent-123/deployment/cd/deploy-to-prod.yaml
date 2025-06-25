@@ -60,7 +60,7 @@ substitutions:
   _PROD_PROJECT_ID: YOUR_PROD_PROJECT_ID
   _REGION: europe-west3
 
-logsBucket: gs://${PROJECT_ID}-agent-123-logs-data/build-logs
+logsBucket: gs://${PROJECT_ID}-europe-north1-cloudbuild-logs/build-logs
 options:
   substitutionOption: ALLOW_LOOSE
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
