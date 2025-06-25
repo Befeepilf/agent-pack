@@ -7,6 +7,7 @@ authors = [
 ]
 dependencies = [
     "google-adk~=1.1.0",
+    "Deprecated~=1.2.18",
     "langchain-google-vertexai~=2.0.7",
     "langchain~=0.3.24",
     "langchain-core~=0.3.55",
