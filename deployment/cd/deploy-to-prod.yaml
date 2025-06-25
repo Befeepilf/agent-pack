@@ -51,7 +51,7 @@ steps:
             --region ${_REGION} \
             --service_name ${_UI_SERVICE_NAME} \
             --with_ui \
-            --session_db_url="agentengine://${_AGENT_ENGINE_RESOURCE}" \
+            --session_db_url="agentengine://${_AGENT_ENGINE_ID}" \
             app
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
@@ -62,7 +62,7 @@ substitutions:
   _DATA_STORE_ID: placeholder
   _DATA_STORE_REGION: europe-west3
   _UI_SERVICE_NAME: agent123-ui
-  _AGENT_ENGINE_RESOURCE: projects/528546740995/locations/europe-west3/reasoningEngines/2271503062054993920
+  _AGENT_ENGINE_ID: "2271503062054993920"
 
 logsBucket: gs://528546740995-europe-west3-cloudbuild-logs/build-logs
 options:
