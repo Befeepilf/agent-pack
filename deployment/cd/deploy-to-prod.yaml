@@ -13,25 +13,6 @@
 # limitations under the License.
 
 steps:
-  - name: "python:3.11-slim"
-    id: deploy-data-ingestion-pipeline-prod
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        cd data_ingestion && pip install uv==0.6.12 --user && cd data_ingestion_pipeline && \
-        uv sync --frozen && uv run python submit_pipeline.py
-    env:
-      - "PIPELINE_ROOT=${_PIPELINE_GCS_ROOT}"
-      - "REGION=${_REGION}"
-      - "DATA_STORE_REGION=${_DATA_STORE_REGION}"
-      - "DATA_STORE_ID=${_DATA_STORE_ID}"
-      - "PROJECT_ID=${_PROD_PROJECT_ID}"
-      - "SERVICE_ACCOUNT=${_PIPELINE_SA_EMAIL}"
-      - "PIPELINE_NAME=${_PIPELINE_NAME}"
-      - "CRON_SCHEDULE=${_PIPELINE_CRON_SCHEDULE}"
-      - "DISABLE_CACHING=TRUE"
-      - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
   - name: "python:3.11-slim" 
     id: install-dependencies
     entrypoint: /bin/bash
