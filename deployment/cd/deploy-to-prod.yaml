@@ -46,6 +46,8 @@ steps:
           pip install uv==0.6.12 --user && uv sync --frozen
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
+          # Ensure Cloud Run image installs all agent dependencies by copying the requirements file generated in the trigger-deployment step above
+          cp .requirements.txt app/requirements.txt
           uv run adk deploy cloud_run \
             --project ${_PROD_PROJECT_ID} \
             --region ${_REGION} \
