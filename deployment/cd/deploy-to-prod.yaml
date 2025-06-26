@@ -44,7 +44,7 @@ steps:
       - "-c"
       - |
           pip install uv==0.6.12 --user && \
-          export PATH="$PATH:$HOME/.local/bin" && \
+          export PATH="$$PATH:$$HOME/.local/bin" && \
           uv sync --frozen
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
