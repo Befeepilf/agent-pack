@@ -151,8 +151,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--location",
-        default="europe-west3",
-        help="GCP region (defaults to europe-west3)",
+        default="europe-west1",
+        help="GCP region (defaults to europe-west1)",
     )
     parser.add_argument(
         "--agent-name",

@@ -62,13 +62,13 @@ steps:
 
 substitutions:
   _PROD_PROJECT_ID: yeply-testing
-  _REGION: europe-west3
+  _REGION: europe-west1
   _DATA_STORE_ID: placeholder
-  _DATA_STORE_REGION: europe-west3
+  _DATA_STORE_REGION: europe-west1
   _UI_SERVICE_NAME: agent123-ui
   _AGENT_ENGINE_ID: "2271503062054993920"
 
-logsBucket: gs://528546740995-europe-west3-cloudbuild-logs/build-logs
+logsBucket: gs://528546740995-europe-west1-cloudbuild-logs/build-logs
 options:
   substitutionOption: ALLOW_LOOSE
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET

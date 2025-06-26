@@ -37,7 +37,7 @@ def process_data(
     destination_dataset: str = "stackoverflow_data",
     destination_table: str = "incremental_questions_embeddings",
     deduped_table: str = "questions_embeddings",
-    location: str = "europe-west3",
+    location: str = "europe-west1",
     embedding_column: str = "embedding",
 ) -> None:
     """Process StackOverflow questions and answers by:

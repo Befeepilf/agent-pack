@@ -17,7 +17,7 @@ host_connection_name = "git-agent-123"
 repository_name = "repo-agent-123"
 
 # The Google Cloud region you will use to deploy the infrastructure
-region = "europe-west3"
+region = "europe-west1"
 pipeline_cron_schedule = "0 0 * * 0"
 #The value can only be one of "global", "us" and "eu".
 data_store_region = "eu"

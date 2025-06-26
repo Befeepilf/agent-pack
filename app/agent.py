@@ -25,7 +25,7 @@ from app.templates import format_docs
 
 EMBEDDING_MODEL = "text-embedding-005"
 LLM_LOCATION = "global"
-LOCATION = "europe-west3"
+LOCATION = "europe-west1"
 LLM = "gemini-2.0-flash-001"
 
 credentials, project_id = google.auth.default()

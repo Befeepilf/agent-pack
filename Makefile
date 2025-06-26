@@ -28,7 +28,7 @@ data-ingestion:
 	PROJECT_ID=$$(gcloud config get-value project) && \
 	(cd data_ingestion && uv run data_ingestion_pipeline/submit_pipeline.py \
 		--project-id=$$PROJECT_ID \
-		--region="europe-west3" \
+		--region="europe-west1" \
 		--data-store-id="agent-123-datastore" \
 		--data-store-region="eu" \
 		--service-account="agent-123-rag@$$PROJECT_ID.iam.gserviceaccount.com" \
