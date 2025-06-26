@@ -37,7 +37,7 @@ steps:
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
-  - name: "python:3.11-slim"
+  - name: "gcr.io/cloud-builders/gcloud"
     id: deploy-ui
     entrypoint: /bin/bash
     args:
