@@ -43,7 +43,9 @@ steps:
     args:
       - "-c"
       - |
-          pip install uv==0.6.12 --user && uv sync --frozen
+          pip install uv==0.6.12 --user && \
+          export PATH="$PATH:$HOME/.local/bin" && \
+          uv sync --frozen
           echo "deployment_metadata.json:"
           cat deployment_metadata.json
           # Ensure Cloud Run image installs all agent dependencies by copying the requirements file generated in the trigger-deployment step above
@@ -55,8 +57,6 @@ steps:
             --with_ui \
             --session_db_url="agentengine://${_AGENT_ENGINE_ID}" \
             app
-    env:
-      - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
 substitutions:
   _PROD_PROJECT_ID: yeply-testing
