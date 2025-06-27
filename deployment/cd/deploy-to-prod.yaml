@@ -33,7 +33,7 @@ steps:
         uv run app/agent_engine_app.py \
           --project ${_PROD_PROJECT_ID} \
           --location ${_REGION} \
-          --set-env-vars="COMMIT_SHA=${COMMIT_SHA},DATA_STORE_ID=${_DATA_STORE_ID},DATA_STORE_REGION=${_DATA_STORE_REGION}"
+          --set-env-vars="COMMIT_SHA=${COMMIT_SHA},DATA_STORE_ID=${_DATA_STORE_ID},DATA_STORE_REGION=${_DATA_STORE_REGION},GOOGLE_VERTEX_ENGINE_ID=${_G_VERTEX_ENGINE_ID},ENGINE_LOCATION=${_G_VERTEX_ENGINE_LOCATION}"
     env:
       - 'PATH=/usr/local/bin:/usr/bin:~/.local/bin'
 
@@ -62,6 +62,8 @@ steps:
 
 substitutions:
   _PROD_PROJECT_ID: yeply-testing
+  _G_VERTEX_ENGINE_ID: something
+  _G_VERTEX_ENGINE_LOCATION: eu
   _REGION: europe-west1
   _DATA_STORE_ID: placeholder
   _DATA_STORE_REGION: europe-west1
