@@ -19,9 +19,10 @@ import google
 import vertexai
 from google.adk.agents import Agent
 from langchain_google_vertexai import VertexAIEmbeddings
-
+from jinja2 import Environment, FileSystemLoader
 from app.retrievers import get_compressor, get_retriever
 from app.templates import format_docs
+from app.tools.search import search_engine 
 
 EMBEDDING_MODEL = "text-embedding-005"
 LLM_LOCATION = "global"
@@ -73,7 +74,7 @@ def search_data_tool(query: str) -> str:
         # Use the retriever to fetch relevant documents based on the query
         retrieved = search_engine(query)
         # Format retrieved documents into a consistent structure for LLM consumption
-        #formatted_docs = format_docs.format(docs=retrieved_docs)
+        #formatted_docs = format_docs.format(docs=retrieved)
         return retrieved
     except Exception as e:
         return f"Calling retrieval tool with query:\n\n{query}\n\nraised the following error:\n\n{type(e)}: {e}"
@@ -88,5 +89,5 @@ root_agent = Agent(
     name="root_agent",
     model="gemini-2.0-flash",
     instruction=instruction,
-    tools=[retrieve_docs],
+    tools=[search_data_tool],
 )

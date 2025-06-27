@@ -3,6 +3,7 @@ from google.cloud import discoveryengine_v1 as discoveryengine
 from google.api_core import exceptions
 import os
 import google.auth
+import json
 
 # Get the actual authenticated project ID
 try:
@@ -44,32 +45,16 @@ def convert_structured_data_to_text(data_dict):
         return ""
     
     text_parts = []
+    text = ""
+    content = data_dict.get("content", "")
+    if content:
+        text_parts = [*text_parts, f"**Content:**\n{content}"]
+        text += content
+    else:
+        text_parts = [*text_parts, f"**Content:**\n{json.dumps(data_dict)}"]
+        text += json.dumps(data_dict)
     
-    for key, value in data_dict.items():
-        if isinstance(value, dict):
-            # Recursively handle nested dictionaries
-            nested_text = convert_structured_data_to_text(value)
-            text_parts.append(f"{key}:\n{nested_text}")
-        elif isinstance(value, list):
-            # Handle lists
-            if value:
-                if isinstance(value[0], dict):
-                    # List of dictionaries
-                    list_items = []
-                    for i, item in enumerate(value):
-                        item_text = convert_structured_data_to_text(item)
-                        list_items.append(f"  {i+1}. {item_text}")
-                    text_parts.append(f"{key}:\n" + "\n".join(list_items))
-                else:
-                    # Simple list
-                    text_parts.append(f"{key}: {', '.join(str(v) for v in value)}")
-            else:
-                text_parts.append(f"{key}: (empty list)")
-        else:
-            # Simple value
-            text_parts.append(f"{key}: {value}")
-    
-    return "\n".join(text_parts)
+    return text
 
 def search_engine(
     search_query: str,
@@ -104,41 +89,15 @@ def search_engine(
             )
 
             page_result = client.search(request)
-
-            # Collect all results from all pages
-            all_formatted_results = []
-            total_results = 0
             
             for response in page_result:
                 if response.document.struct_data:
                     formatted_result = format_search_result_for_llm(response.document.struct_data)
-                    all_formatted_results.append(formatted_result)
+                    return formatted_result
                 else:
                     print("No structured data found")
                 
-            
-            if all_formatted_results:
-                # Combine all results into a single markdown string
-                markdown_output = f"# Search Results for: {search_query}\n\n"
-                markdown_output += f"**Total Results Found:** {total_results}\n\n"
-                markdown_output += "---\n\n"
-                
-                for i, formatted_result in enumerate(all_formatted_results):
-                    markdown_output += f"## Result {i+1}\n\n{formatted_result}\n\n---\n\n"
-                
-                print(f"Successfully formatted {total_results} results for LLM")
-                return markdown_output
-            else:
-                return f"# Search Results for: {search_query}\n\nNo results found."
+            return "No structured data found"
                 
     except Exception as e:
-        print(f"Unexpected Error: {e}")
-        print(f"Error type: {type(e).__name__}")
-        print(f"Error details: {str(e)}")
-
-
-if __name__ == "__main__":
-    markdown_results = search_engine("i am sick what do i do")
-    
-    print("\n=== Final Markdown Output for LLM ===")
-    print(markdown_results)
+        return f"Unexpected Error: {e}"
