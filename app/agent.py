@@ -52,7 +52,7 @@ retriever = get_retriever(
     data_store_region=data_store_region,
     embedding=embedding,
     embedding_column=EMBEDDING_COLUMN,
-    max_documents=10,
+    max_documents=5,
 )
 
 compressor = get_compressor(
