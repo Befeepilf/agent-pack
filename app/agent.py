@@ -19,9 +19,10 @@ import google
 import vertexai
 from google.adk.agents import Agent
 from langchain_google_vertexai import VertexAIEmbeddings
-
+from jinja2 import Environment, FileSystemLoader
 from app.retrievers import get_compressor, get_retriever
 from app.templates import format_docs
+from app.tools.search import search_engine 
 
 EMBEDDING_MODEL = "text-embedding-005"
 LLM_LOCATION = "global"
@@ -51,48 +52,42 @@ retriever = get_retriever(
     data_store_region=data_store_region,
     embedding=embedding,
     embedding_column=EMBEDDING_COLUMN,
-    max_documents=10,
+    max_documents=5,
 )
 
 compressor = get_compressor(
     project_id=project_id,
 )
 
-
-def retrieve_docs(query: str) -> str:
+def search_data_tool(query: str) -> str:
     """
     Useful for retrieving relevant documents based on a query.
     Use this when you need additional information to answer a question.
 
     Args:
         query (str): The user's question or search query.
-
+    
     Returns:
         str: Formatted string containing relevant document content retrieved and ranked based on the query.
     """
     try:
         # Use the retriever to fetch relevant documents based on the query
-        retrieved_docs = retriever.invoke(query)
-        # Re-rank docs with Vertex AI Rank for better relevance
-        ranked_docs = compressor.compress_documents(
-            documents=retrieved_docs, query=query
-        )
-        # Format ranked documents into a consistent structure for LLM consumption
-        formatted_docs = format_docs.format(docs=ranked_docs)
+        retrieved = search_engine(query)
+        # Format retrieved documents into a consistent structure for LLM consumption
+        #formatted_docs = format_docs.format(docs=retrieved)
+        return retrieved
     except Exception as e:
         return f"Calling retrieval tool with query:\n\n{query}\n\nraised the following error:\n\n{type(e)}: {e}"
+    
 
-    return formatted_docs
-
-
-instruction = """You are an AI assistant for question-answering tasks.
-Answer to the best of your ability using the context provided.
-Leverage the Tools you are provided to answer questions.
-If you already know the answer to a question, you can respond directly without using the tools."""
+# Load the system instruction from the instructions folder  
+env = Environment(loader=FileSystemLoader("app/instructions"))
+template = env.get_template("system.jinja")
+instruction = template.render()
 
 root_agent = Agent(
     name="root_agent",
     model="gemini-2.0-flash",
     instruction=instruction,
-    tools=[retrieve_docs],
+    tools=[search_data_tool],
 )
