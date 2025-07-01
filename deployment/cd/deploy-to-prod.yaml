@@ -70,7 +70,7 @@ steps:
           echo "Building and deploying Basic Auth proxy..."
           # Build the proxy image from the Dockerfile located at deployment/proxy
           PROXY_IMAGE="gcr.io/${_PROD_PROJECT_ID}/basic-auth-proxy:${COMMIT_SHA}"
-          gcloud builds submit deployment/proxy --tag $$PROXY_IMAGE --project ${_PROD_PROJECT_ID} --async
+          gcloud builds submit deployment/proxy --tag $$PROXY_IMAGE --project ${_PROD_PROJECT_ID}
 
           # Discover the URL of the backend (ADK UI) Cloud Run service
           BACKEND_URL=$(gcloud run services describe ${_UI_SERVICE_NAME} \
