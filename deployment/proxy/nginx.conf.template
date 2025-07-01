@@ -1,4 +1,4 @@
-env upstream;
+env UPSTREAM;
 
 worker_processes  1;
 
@@ -11,13 +11,11 @@ http {
     listen 8080;
 
     location / {
-      # Basic Authentication
       auth_basic "Restricted";
       auth_basic_user_file /etc/nginx/htpasswd;
 
-      # Reverse proxy to the backend service
-      proxy_pass $upstream;
-      proxy_set_header Host $host;
+      proxy_pass ${UPSTREAM};
+      proxy_set_header Host $proxy_host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
