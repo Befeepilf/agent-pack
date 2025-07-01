@@ -60,6 +60,48 @@ steps:
             --session_db_url="agentengine://${_AGENT_ENGINE_ID}" \
             app
 
+  - name: "gcr.io/cloud-builders/gcloud"
+    id: deploy-proxy
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+          set -eo pipefail
+          echo "Building and deploying Basic Auth proxy..."
+          # Build the proxy image from the Dockerfile located at deployment/proxy
+          PROXY_IMAGE="gcr.io/${_PROD_PROJECT_ID}/basic-auth-proxy:${COMMIT_SHA}"
+          gcloud builds submit deployment/proxy --tag $PROXY_IMAGE --project ${_PROD_PROJECT_ID}
+
+          # Discover the URL of the backend (ADK UI) Cloud Run service
+          BACKEND_URL=$(gcloud run services describe ${_UI_SERVICE_NAME} \
+            --region ${_REGION} \
+            --platform managed \
+            --project ${_PROD_PROJECT_ID} \
+            --format="value(status.url)")
+          echo "Backend URL: $BACKEND_URL"
+
+          # Deploy the proxy, injecting the upstream URL via env-var
+          gcloud run deploy ${_PROXY_SERVICE_NAME} \
+            --image $PROXY_IMAGE \
+            --region ${_REGION} \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars "upstream=$BACKEND_URL" \
+            --service-account ${_PROXY_SERVICE_ACCOUNT}
+
+          # Restrict the backend to only accept traffic from the proxy
+          gcloud run services add-iam-policy-binding ${_UI_SERVICE_NAME} \
+            --region ${_REGION} \
+            --platform managed \
+            --member="serviceAccount:${_PROXY_SERVICE_ACCOUNT}" \
+            --role="roles/run.invoker"
+
+          # Lock the backend ingress to internal to enforce proxy usage
+          gcloud run services update ${_UI_SERVICE_NAME} \
+            --region ${_REGION} \
+            --platform managed \
+            --ingress internal
+
 substitutions:
   _PROD_PROJECT_ID: yeply-testing
   _G_VERTEX_ENGINE_ID: something
@@ -69,6 +111,8 @@ substitutions:
   _DATA_STORE_REGION: europe-west1
   _UI_SERVICE_NAME: agent-123-ui
   _AGENT_ENGINE_ID: "6675354994553651200"
+  _PROXY_SERVICE_NAME: agent-123-proxy
+  _PROXY_SERVICE_ACCOUNT: agent-123-proxy-sa@yeply-testing.iam.gserviceaccount.com
 
 logsBucket: gs://528546740995-europe-west1-cloudbuild-logs/build-logs
 options:
