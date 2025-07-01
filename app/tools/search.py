@@ -98,11 +98,12 @@ def format_search_result_for_llm(
 ) -> str:
     data = struct_data_to_dict(struct_data)
     logger.info(f"Formatting search result: {data}")
-    content = data.get("content", "")
-    if content:
-        if len(content) > max_length:
-            content = content[:max_length] + "..."
-        return f"**Content:**\n{content}"
+
+    # content = data.get("content", "")
+    # if content:
+    #     if len(content) > max_length:
+    #         content = content[:max_length] + "..."
+    #     return f"**Content:**\n{content}"
 
     raw_data = str(
         data
