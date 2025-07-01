@@ -21,10 +21,9 @@ from google.adk.agents import Agent
 from langchain_google_vertexai import VertexAIEmbeddings
 from jinja2 import Template
 from app.retrievers import get_compressor, get_retriever
-from app.templates import format_docs
 from app.tools.search import search_engine 
 
-EMBEDDING_MODEL = "text-embedding-005"
+EMBEDDING_MODEL = "gemini-embedding-001"
 LLM_LOCATION = "global"
 LOCATION = "europe-west1"
 LLM = "gemini-2.5-flash"
