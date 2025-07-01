@@ -59,17 +59,32 @@ DATA_STORES = [
 
 
 def search_technical_docs(search_query: str) -> str:
-    """Searches for technical bike documentation"""
+    """
+    Searches for technical bike documentation
+
+    Args:
+        search_query: Important keywords to search for
+    """
     return search_engine(search_query, DATA_STORES[0])
 
 
 def search_bike_histories(search_query: str) -> str:
-    """Searches work order and damage report histories of bikes"""
+    """
+    Searches work order and damage report histories of bikes
+
+    Args:
+        search_query: Important keywords to search for
+    """
     return search_engine(search_query, DATA_STORES[1])
 
 
 def search_slack_messages(search_query: str) -> str:
-    """Searches for messages from internal technical channels"""
+    """
+    Searches for messages from internal technical channels
+
+    Args:
+        search_query: Important keywords to search for
+    """
     return search_engine(search_query, DATA_STORES[2])
 
 
@@ -77,12 +92,20 @@ def search_yeplypedia(search_query: str) -> str:
     """
     Searches for information in the internal Yeplypedia knowledge base.
     It contains various information about company processes, procedures, tutorials, customer-specific information, etc.
+
+    Args:
+        search_query: Important keywords to search for
     """
     return search_engine(search_query, DATA_STORES[3])
 
 
 def search_erp_software_system(search_query: str) -> str:
-    """Searches for information on how to use our ERP software system, including Ops tool, Vantool, B2B portal (My-Business) and B2C portal (My-Yeply), and general information about the software system."""
+    """
+    Searches for information on how to use our ERP software system, including Ops tool, Vantool, B2B portal (My-Business) and B2C portal (My-Yeply), and general information about the software system.
+
+    Args:
+        search_query: Important keywords to search for
+    """
     return search_engine(search_query, DATA_STORES[4])
 
 
@@ -108,7 +131,7 @@ def search_engine(search_query: str, data_store: DataStore) -> str:
         request = discoveryengine.SearchRequest(
             serving_config=serving_config,
             query=search_query,
-            page_size=5,  # 5 results for faster response
+            page_size=8,
             content_search_spec=discoveryengine.SearchRequest.ContentSearchSpec(
                 snippet_spec=discoveryengine.SearchRequest.ContentSearchSpec.SnippetSpec(
                     return_snippet=True,
