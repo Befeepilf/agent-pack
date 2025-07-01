@@ -18,13 +18,18 @@ import os
 import google
 import vertexai
 from google.adk.agents import Agent
-from langchain_google_vertexai import VertexAIEmbeddings
 from jinja2 import Template
+from langchain_google_vertexai import VertexAIEmbeddings
 from app.retrievers import get_compressor, get_retriever
-from app.templates import format_docs
-from app.tools.search import search_engine 
+from app.tools.search import (
+    search_bike_histories,
+    search_erp_software_system,
+    search_slack_messages,
+    search_technical_docs,
+    search_yeplypedia,
+)
 
-EMBEDDING_MODEL = "text-embedding-005"
+EMBEDDING_MODEL = "gemini-embedding-001"
 LLM_LOCATION = "global"
 LOCATION = "europe-west1"
 LLM = "gemini-2.5-flash"
@@ -52,33 +57,12 @@ retriever = get_retriever(
     data_store_region=data_store_region,
     embedding=embedding,
     embedding_column=EMBEDDING_COLUMN,
-    max_documents=5,
+    max_documents=TOP_K,
 )
 
 compressor = get_compressor(
     project_id=project_id,
 )
-
-def search_data_tool(query: str) -> str:
-    """
-    Useful for retrieving relevant documents based on a query.
-    Use this when you need additional information to answer a question.
-
-    Args:
-        query (str): The user's question or search query.
-    
-    Returns:
-        str: Formatted string containing relevant document content retrieved and ranked based on the query.
-    """
-    try:
-        # Use the retriever to fetch relevant documents based on the query
-        retrieved = search_engine(query)
-        # Format retrieved documents into a consistent structure for LLM consumption
-        # formatted_docs = format_docs.format(docs=retrieved)
-        return retrieved
-    except Exception as e:
-        return f"Calling retrieval tool with query:\n\n{query}\n\nraised the following error:\n\n{type(e)}: {e}"
-
 
 # Load the system instruction from the instructions folder
 with open("app/instructions/system.jinja", "r") as f:
@@ -87,8 +71,14 @@ instruction = template.render()
 
 
 root_agent = Agent(
-    name="root_agent",
-    model="gemini-2.0-flash",
+    name="yeply_benelux_mechanic_assistant",
+    model=LLM,
     instruction=instruction,
-    tools=[search_data_tool],
+    tools=[
+        search_technical_docs,
+        search_bike_histories,
+        search_slack_messages,
+        search_yeplypedia,
+        search_erp_software_system,
+    ],
 )
