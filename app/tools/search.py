@@ -51,6 +51,10 @@ DATA_STORES = [
         id="yeplypedia_1751380874456",
         name="Internal Yeplypedia knowledge base (wiki-like)",
     ),
+    DataStore(
+        id="erp-software-system_1751387305393",
+        name="Documentation on how to use our ERP software system",
+    ),
 ]
 
 
@@ -70,8 +74,16 @@ def search_slack_messages(search_query: str) -> str:
 
 
 def search_yeplypedia(search_query: str) -> str:
-    """Searches for information in the internal Yeplypedia knowledge base (wiki-like)"""
+    """
+    Searches for information in the internal Yeplypedia knowledge base.
+    It contains various information about company processes, procedures, tutorials, customer-specific information, etc.
+    """
     return search_engine(search_query, DATA_STORES[3])
+
+
+def search_erp_software_system(search_query: str) -> str:
+    """Searches for information on how to use our ERP software system, including Ops tool, Vantool, B2B portal (My-Business) and B2C portal (My-Yeply), and general information about the software system."""
+    return search_engine(search_query, DATA_STORES[4])
 
 
 def search_engine(search_query: str, data_store: DataStore) -> str:
@@ -147,23 +159,16 @@ def search_engine(search_query: str, data_store: DataStore) -> str:
     #     return f"Search encountered an error: {str(e)[:100]}..."
 
 
-def format_search_result_for_llm(
-    struct_data: struct_pb2.Struct | MapComposite, max_length: int = 1000
-) -> str:
+def format_search_result_for_llm(struct_data: struct_pb2.Struct | MapComposite) -> str:
     data = struct_data_to_dict(struct_data)
     logger.info(f"Formatting search result: {data}")
 
     # content = data.get("content", "")
     # if content:
-    #     if len(content) > max_length:
-    #         content = content[:max_length] + "..."
     #     return f"**Content:**\n{content}"
 
-    raw_data = str(
-        data
-    )  # don't use json.dumps as the data might contain non-serializable objects like proto.marshal.collections.repeated.RepeatedComposite
-    if len(raw_data) > max_length:
-        raw_data = raw_data[:max_length] + "..."
+    # Don't use json.dumps as the data might contain non-serializable objects like proto.marshal.collections.repeated.RepeatedComposite
+    raw_data = str(data)
     return f"**Data:**\n{raw_data}"
 
 

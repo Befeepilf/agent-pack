@@ -24,6 +24,7 @@ from langchain_google_vertexai import VertexAIEmbeddings
 from app.retrievers import get_compressor, get_retriever
 from app.tools.search import (
     search_bike_histories,
+    search_erp_software_system,
     search_slack_messages,
     search_technical_docs,
     search_yeplypedia,
@@ -79,5 +80,6 @@ root_agent = Agent(
         search_bike_histories,
         search_slack_messages,
         search_yeplypedia,
+        search_erp_software_system,
     ],
 )
