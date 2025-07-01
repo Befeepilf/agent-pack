@@ -71,7 +71,7 @@ instruction = template.render()
 
 
 root_agent = Agent(
-    name="root_agent",
+    name="yeply_benelux_mechanic_assistant",
     model=LLM,
     instruction=instruction,
     tools=[
