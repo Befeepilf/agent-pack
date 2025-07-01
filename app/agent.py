@@ -20,7 +20,6 @@ import vertexai
 from google.adk.agents import Agent
 from jinja2 import Template
 from langchain_google_vertexai import VertexAIEmbeddings
-
 from app.retrievers import get_compressor, get_retriever
 from app.tools.search import (
     search_bike_histories,
