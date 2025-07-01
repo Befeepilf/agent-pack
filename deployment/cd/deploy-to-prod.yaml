@@ -78,7 +78,7 @@ steps:
             --platform managed \
             --project ${_PROD_PROJECT_ID} \
             --format="value(status.url)")
-          echo "Backend URL: $BACKEND_URL"
+          echo "Backend URL: $$BACKEND_URL"
 
           # Deploy the proxy, injecting the upstream URL via env-var
           gcloud run deploy ${_PROXY_SERVICE_NAME} \
@@ -86,7 +86,7 @@ steps:
             --region ${_REGION} \
             --platform managed \
             --allow-unauthenticated \
-            --set-env-vars "upstream=$BACKEND_URL" \
+            --set-env-vars "upstream=$$BACKEND_URL" \
             --service-account ${_PROXY_SERVICE_ACCOUNT}
 
           # Restrict the backend to only accept traffic from the proxy
