@@ -27,7 +27,7 @@ from app.tools.search import search_engine
 EMBEDDING_MODEL = "gemini-embedding-001"
 LLM_LOCATION = "global"
 LOCATION = "europe-west1"
-LLM = "gemini-2.5-flash"
+LLM = "gemini-2.5-pro"
 
 credentials, project_id = google.auth.default()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
