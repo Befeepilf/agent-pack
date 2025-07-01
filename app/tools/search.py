@@ -101,7 +101,8 @@ def search_yeplypedia(search_query: str) -> str:
 
 def search_erp_software_system(search_query: str) -> str:
     """
-    Searches for information on how to use our ERP software system, including Ops tool, Vantool, B2B portal (My-Business) and B2C portal (My-Yeply), and general information about the software system.
+    Searches for information on how to use our ERP software system, including Ops tool, Vantool, B2B portal (My-Business), B2C portal (My-Yeply) and booking app.
+    It also includes general information about the software system, and integration with other systems and businesses.
 
     Args:
         search_query: Important keywords to search for
