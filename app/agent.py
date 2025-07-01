@@ -18,10 +18,11 @@ import os
 import google
 import vertexai
 from google.adk.agents import Agent
-from langchain_google_vertexai import VertexAIEmbeddings
 from jinja2 import Template
+from langchain_google_vertexai import VertexAIEmbeddings
+
 from app.retrievers import get_compressor, get_retriever
-from app.tools.search import search_engine 
+from app.tools.search import search_engine
 
 EMBEDDING_MODEL = "gemini-embedding-001"
 LLM_LOCATION = "global"
