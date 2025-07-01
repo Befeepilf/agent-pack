@@ -1,5 +1,6 @@
 import logging
 import os
+from dataclasses import dataclass
 
 from google.api_core import exceptions
 from google.api_core.client_options import ClientOptions
@@ -26,9 +27,54 @@ engine_id = os.environ.get(
     "GOOGLE_VERTEX_ENGINE_ID", "yeply-master-search-intern_1747655638365"
 )
 
-def search_engine(
-    search_query: str,
-) -> str:
+
+@dataclass
+class DataStore:
+    id: str
+    name: str
+
+
+DATA_STORES = [
+    DataStore(
+        id="technical-docs_1751366705621",
+        name="Technical Docs for Bikes",
+    ),
+    DataStore(
+        id="bike-histories_1751381211957",
+        name="Work order and Damage report histories of bikes",
+    ),
+    DataStore(
+        id="slack-messages_1747059296012",
+        name="Slack messages from internal technical channels",
+    ),
+    DataStore(
+        id="yeplypedia_1751380874456",
+        name="Internal Yeplypedia knowledge base (wiki-like)",
+    ),
+]
+
+
+def search_technical_docs(search_query: str) -> str:
+    """Searches for technical bike documentation"""
+    return search_engine(search_query, DATA_STORES[0])
+
+
+def search_bike_histories(search_query: str) -> str:
+    """Searches work order and damage report histories of bikes"""
+    return search_engine(search_query, DATA_STORES[1])
+
+
+def search_slack_messages(search_query: str) -> str:
+    """Searches for messages from internal technical channels"""
+    return search_engine(search_query, DATA_STORES[2])
+
+
+def search_yeplypedia(search_query: str) -> str:
+    """Searches for information in the internal Yeplypedia knowledge base (wiki-like)"""
+    return search_engine(search_query, DATA_STORES[3])
+
+
+def search_engine(search_query: str, data_store: DataStore) -> str:
     """
     Search the engine and return formatted results as a markdown string for LLM consumption.
 
@@ -57,6 +103,14 @@ def search_engine(
                     max_snippet_count=1,  # Limit snippets to 1 per result
                 )
             ),
+            data_store_specs=[
+                discoveryengine.SearchRequest.DataStoreSpec(
+                    data_store=f"projects/{project_id}/locations/{location}/collections/default_collection/dataStores/{data_store.id}"
+                )
+            ],
+            params={
+                "user_country_code": "nl",
+            },
         )
 
         # Execute search with timeout handling
@@ -85,7 +139,7 @@ def search_engine(
         else:
             output = "No relevant results found."
 
-        return f"# Search Results\n\n{output}"
+        return f"# Search Results for '{data_store.name}'\n\n{output}"
 
     except exceptions.ResourceExhausted:
         return "Rate limit exceeded. Please try again in a moment."
