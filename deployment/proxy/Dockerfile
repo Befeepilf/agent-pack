@@ -1,10 +1,12 @@
 FROM nginx:1.29-alpine
 
-COPY nginx.conf /etc/nginx/nginx.conf
 COPY htpasswd /etc/nginx/htpasswd
+COPY nginx.conf.template /etc/nginx/nginx.template
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-ENV upstream="https://placeholder.com"
+ENV UPSTREAM="https://example.com"
 
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"] 
+ENTRYPOINT ["/docker-entrypoint.sh"] 

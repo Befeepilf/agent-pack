@@ -86,7 +86,7 @@ steps:
             --region ${_REGION} \
             --platform managed \
             --allow-unauthenticated \
-            --set-env-vars "upstream=$$BACKEND_URL" \
+            --set-env-vars "UPSTREAM=$$BACKEND_URL" \
             --service-account ${_PROXY_SERVICE_ACCOUNT}
 
           # Restrict the backend to only accept traffic from the proxy
