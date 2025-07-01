@@ -52,7 +52,7 @@ retriever = get_retriever(
     data_store_region=data_store_region,
     embedding=embedding,
     embedding_column=EMBEDDING_COLUMN,
-    max_documents=5,
+    max_documents=TOP_K,
 )
 
 compressor = get_compressor(
@@ -88,7 +88,7 @@ instruction = template.render()
 
 root_agent = Agent(
     name="root_agent",
-    model="gemini-2.0-flash",
+    model=LLM,
     instruction=instruction,
     tools=[search_data_tool],
 )
