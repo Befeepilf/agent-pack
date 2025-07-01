@@ -19,7 +19,7 @@ import google
 import vertexai
 from google.adk.agents import Agent
 from langchain_google_vertexai import VertexAIEmbeddings
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Template
 from app.retrievers import get_compressor, get_retriever
 from app.templates import format_docs
 from app.tools.search import search_engine 
@@ -74,16 +74,17 @@ def search_data_tool(query: str) -> str:
         # Use the retriever to fetch relevant documents based on the query
         retrieved = search_engine(query)
         # Format retrieved documents into a consistent structure for LLM consumption
-        #formatted_docs = format_docs.format(docs=retrieved)
+        # formatted_docs = format_docs.format(docs=retrieved)
         return retrieved
     except Exception as e:
         return f"Calling retrieval tool with query:\n\n{query}\n\nraised the following error:\n\n{type(e)}: {e}"
-    
 
-# Load the system instruction from the instructions folder  
-env = Environment(loader=FileSystemLoader("app/instructions"))
-template = env.get_template("system.jinja")
+
+# Load the system instruction from the instructions folder
+with open("app/instructions/system.jinja", "r") as f:
+    template = Template(f.read())
 instruction = template.render()
+
 
 root_agent = Agent(
     name="root_agent",
