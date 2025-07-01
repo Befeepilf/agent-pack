@@ -86,7 +86,7 @@ steps:
             --region ${_REGION} \
             --platform managed \
             --allow-unauthenticated \
-            --set-env-vars "UPSTREAM=$$BACKEND_URL" \
+            --set-env-vars "UPSTREAM=$$BACKEND_URL"
 
           # Restrict the backend to only accept traffic from the proxy
           gcloud run services add-iam-policy-binding ${_UI_SERVICE_NAME} \

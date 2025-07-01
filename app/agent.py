@@ -65,7 +65,10 @@ compressor = get_compressor(
 )
 
 # Load the system instruction from the instructions folder
-with open("app/instructions/system.jinja", "r") as f:
+instruction_path = os.path.join(
+    os.path.dirname(__file__), "instructions", "system.jinja"
+)
+with open(instruction_path) as f:
     template = Template(f.read())
 instruction = template.render()
 
