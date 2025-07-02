@@ -60,6 +60,18 @@ steps:
             --session_db_url="agentengine://${_AGENT_ENGINE_ID}" \
             app
 
+  - name: "gcr.io/cloud-builders/docker"
+    id: build-proxy-image
+    entrypoint: /bin/bash
+    args:
+      - "-c"
+      - |
+          set -eo pipefail
+          PROXY_IMAGE="gcr.io/${_PROD_PROJECT_ID}/basic-auth-proxy:${COMMIT_SHA}"
+          echo "Building proxy image $$PROXY_IMAGE ..."
+          docker build -t $$PROXY_IMAGE deployment/proxy
+          docker push $$PROXY_IMAGE
+
   - name: "gcr.io/cloud-builders/gcloud"
     id: deploy-proxy
     entrypoint: /bin/bash
@@ -67,11 +79,8 @@ steps:
       - "-c"
       - |
           set -eo pipefail
-          echo "Building and deploying Basic Auth proxy..."
-          # Build the proxy image from the Dockerfile located at deployment/proxy
+          echo "Deploying Basic Auth proxy..."
           PROXY_IMAGE="gcr.io/${_PROD_PROJECT_ID}/basic-auth-proxy:${COMMIT_SHA}"
-          gcloud builds submit deployment/proxy --tag $$PROXY_IMAGE --project ${_PROD_PROJECT_ID}
-
           # Discover the URL of the backend (ADK UI) Cloud Run service
           BACKEND_URL=$(gcloud run services describe ${_UI_SERVICE_NAME} \
             --region ${_REGION} \
